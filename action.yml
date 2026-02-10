@@ -1,0 +1,44 @@
+name: Helm Deploy
+description: Greet someone and record the time
+inputs:
+  app:
+    description: For example `health-hub-web`
+    required: true
+  ecr-repository:
+    description: For example `health-hub-web`
+    required: false
+  namespace:
+    description: For example 'default'
+    required: true
+    default: default
+  team:
+    description: For example 'health-hub'
+    required: true
+  country:
+    description: For example `ae`
+    required: true
+  stage:
+    description: For example `acc`
+    required: true
+  tag:
+    description: For example `v1.2.3`
+    required: true
+  username:
+    description: Username for login to Git URL
+    required: true
+  password:
+    required: true
+  jsonpath:
+    required: true
+    default: $.microservice.image
+  workspace:
+    description: Bitbucket workspace slug
+    required: true
+    default: carepaydev
+  repository:
+    description: Bitbucket repository slug
+    required: true
+    value: central-configs
+runs:
+  using: "node24"
+  main: "dist/index.js"
