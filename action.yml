@@ -4,15 +4,13 @@ inputs:
   app:
     description: For example `health-hub-web`
     required: true
-    default: ${{ vars.APP }}
   namespace:
     description: For example 'default'
     required: true
-    default: ${{ vars.NAMESPACE || 'default' }}
+    default: default
   team:
     description: For example 'health-hub'
     required: true
-    default: ${{ vars.TEAM }}
   country:
     description: For example `ae`
     required: true
@@ -29,7 +27,6 @@ inputs:
     default: carepaybot
   password:
     required: true
-    default: ${{ secrets.BITBUCKET_APP_PASSWORD }}
   jsonpath:
     required: true
     default: $.microservice.image
