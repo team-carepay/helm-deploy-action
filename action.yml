@@ -35,7 +35,7 @@ inputs:
   repository:
     description: Bitbucket repository slug
     required: true
-    value: central-configs
+    default: central-configs
 runs:
   using: "node24"
   main: "dist/index.js"
