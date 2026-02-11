@@ -10,6 +10,7 @@ import {
 
 export async function run(): Promise<void> {
   try {
+    core.info(`Starting helm deploy action`);
     const tag: string = core.getInput("tag");
     const team: string = core.getInput("team");
     const namespace: string = core.getInput("namespace");
@@ -73,11 +74,10 @@ export async function run(): Promise<void> {
         );
       }
     } else {
-        core.setFailed(
-          `Failed to fetch from Bitbucket: ${response.status} ${response.statusText}`,
-        );
+      core.setFailed(
+        `Failed to fetch from Bitbucket: ${response.status} ${response.statusText}`,
+      );
     }
-    
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message);

@@ -59194,6 +59194,7 @@ const jsonpath_1 = __importDefault(__nccwpck_require__(4378));
 const client_ecr_1 = __nccwpck_require__(8923);
 async function run() {
     try {
+        core.info(`Starting helm deploy action`);
         const tag = core.getInput("tag");
         const team = core.getInput("team");
         const namespace = core.getInput("namespace");
@@ -59215,6 +59216,7 @@ async function run() {
             },
         });
         if (response.ok) {
+            core.info(`Successfully fetched values from ${valuesYamlFile}`);
             const text = await response.text();
             const yamlDoc = yaml.load(text);
             jsonpath_1.default.value(yamlDoc, jsonpath, tag);
@@ -59231,11 +59233,15 @@ async function run() {
                 body: formData,
             });
             if (response2.ok) {
+                core.info(`Successfully updated values from ${valuesYamlFile}`);
                 await addEcrTag(app, tag, `${country}-${stage}-${tag}`);
             }
             else {
                 core.setFailed(`Failed to update Bitbucket: ${response2.status} ${response2.statusText}`);
             }
+        }
+        else {
+            core.setFailed(`Failed to fetch from Bitbucket: ${response.status} ${response.statusText}`);
         }
     }
     catch (error) {
@@ -59257,6 +59263,7 @@ async function addEcrTag(repositoryName, sourceTag, targetTag) {
             !getResponse.images[0].imageManifest) {
             throw new Error(`Image with tag ${sourceTag} not found in repository ${repositoryName}`);
         }
+        core.info(`Successfully fetched image from ECR`);
         const putCommand = new client_ecr_1.PutImageCommand({
             repositoryName,
             imageManifest: getResponse.images[0].imageManifest,
