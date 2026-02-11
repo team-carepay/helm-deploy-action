@@ -59241,7 +59241,7 @@ async function run() {
             }
         }
         else {
-            core.setFailed(`Failed to fetch from Bitbucket: ${response.status} ${response.statusText}`);
+            core.setFailed(`Failed to fetch from Bitbucket https://api.bitbucket.org/2.0/repositories/${workspace}/${repository}/src/HEAD/${valuesYamlFile}: ${response.status} ${response.statusText}`);
         }
     }
     catch (error) {
