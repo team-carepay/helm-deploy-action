@@ -38,6 +38,7 @@ export async function run(): Promise<void> {
     );
 
     if (response.ok) {
+      core.info(`Successfully fetched values from ${valuesYamlFile}`);
       const text = await response.text();
       const yamlDoc = yaml.load(text) as any;
       jp.value(yamlDoc, jsonpath, tag);
@@ -64,6 +65,7 @@ export async function run(): Promise<void> {
       );
 
       if (response2.ok) {
+        core.info(`Successfully updated values from ${valuesYamlFile}`);
         await addEcrTag(app, tag, `${country}-${stage}-${tag}`);
       } else {
         core.setFailed(
@@ -104,6 +106,7 @@ async function addEcrTag(
         `Image with tag ${sourceTag} not found in repository ${repositoryName}`,
       );
     }
+    core.info(`Successfully fetched image from ECR`);
 
     const putCommand = new PutImageCommand({
       repositoryName,
