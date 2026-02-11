@@ -70,7 +70,12 @@ export async function run(): Promise<void> {
           `Failed to update Bitbucket: ${response2.status} ${response2.statusText}`,
         );
       }
+    } else {
+        core.setFailed(
+          `Failed to fetch from Bitbucket: ${response.status} ${response.statusText}`,
+        );
     }
+    
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message);

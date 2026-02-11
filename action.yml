@@ -4,9 +4,6 @@ inputs:
   app:
     description: For example `health-hub-web`
     required: true
-  ecr-repository:
-    description: For example `health-hub-web`
-    required: false
   namespace:
     description: For example 'default'
     required: true
