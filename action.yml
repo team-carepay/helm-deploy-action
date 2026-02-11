@@ -4,13 +4,15 @@ inputs:
   app:
     description: For example `health-hub-web`
     required: true
+    default: ${{ vars.APP }}
   namespace:
     description: For example 'default'
     required: true
-    default: default
+    default: ${{ vars.NAMESPACE || 'default' }}
   team:
     description: For example 'health-hub'
     required: true
+    default: ${{ vars.TEAM }}
   country:
     description: For example `ae`
     required: true
@@ -20,11 +22,14 @@ inputs:
   tag:
     description: For example `v1.2.3`
     required: true
+    default: ${{ startsWith(github.ref,'refs/tags') && github.ref_name || github.sha }}
   username:
     description: Username for login to Git URL
     required: true
+    default: carepaybot
   password:
     required: true
+    default: ${{ secrets.BITBUCKET_APP_PASSWORD }}
   jsonpath:
     required: true
     default: $.microservice.image
