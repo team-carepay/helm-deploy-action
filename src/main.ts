@@ -10,8 +10,12 @@ export async function run(): Promise<void> {
     const email: string = core.getInput("email");
     const token: string = core.getInput("token");
     const jsonpath: string = core.getInput("jsonpath");
-    const workspace: string = core.getInput("workspace");
-    const repository: string = core.getInput("repository");
+    const workspace: string =
+      core.getInput("workspace") || (process.env.GITHUB_REPOSITORY_OWNER ?? "");
+    const repository: string =
+      core.getInput("repository") ||
+      (process.env.GITHUB_REPOSITORY ?? "").split("/")[1] ||
+      "";
     const file: string = core.getInput("file");
     const value: string = core.getInput("value");
 
