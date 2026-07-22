@@ -15,8 +15,9 @@ entry to a new value, and commits the file back to the default branch with a
 | `jsonpath`   | yes      | `$.microservice.image` | JSONPath of the entry to update                                 |
 | `workspace`  | yes      | `carepaydev`           | GitHub owner/organisation                                       |
 | `repository` | yes      | `central-configs`      | GitHub repository name                                          |
-| `username`   | yes      | `carepaybot`           | Committer name for the commit                                   |
-| `password`   | yes      | —                      | GitHub Personal Access Token (use a secret, never hard-code)    |
+| `username`   | yes      | `github-actions`       | Committer name for the commit                                   |
+| `email`      | yes      | `github-actions@users.noreply.github.com` | Committer email for the commit               |
+| `token`      | yes      | —                      | GitHub Personal Access Token (use a secret, never hard-code)    |
 
 ## Example
 
@@ -37,9 +38,9 @@ jobs:
           file: apps/ussd/values.yaml
           value: ${{ github.ref_name }}
           jsonpath: $.microservice.image
-          password: ${{ secrets.GITHUB_PAT }}
+          token: ${{ secrets.GITHUB_PAT }}
 ```
 
 The step above sets `microservice.image` in `apps/ussd/values.yaml` to the
 pushed tag and commits it to `carepaydev/central-configs`, relying on the
-default `workspace`, `repository`, and `username`.
+default `workspace`, `repository`, `username`, and `email`.
