@@ -1,5 +1,5 @@
 name: Helm Deploy
-description: Updates YAML file in BitBucket by updating a jsonpath entry with a new value
+description: Updates YAML file in GitHub by updating a jsonpath entry with a new value
 inputs:
   file:
     description: For example 'ken-test/applications/default/security/ussd/values.yaml'
@@ -12,16 +12,17 @@ inputs:
     required: true
     default: carepaybot
   password:
+    description: GitHub Personal Access Token (with repo contents write access)
     required: true
   jsonpath:
     required: true
     default: $.microservice.image
   workspace:
-    description: Bitbucket workspace slug
+    description: GitHub owner/organisation
     required: true
     default: carepaydev
   repository:
-    description: Bitbucket repository slug
+    description: GitHub repository name
     required: true
     default: central-configs
 runs:
