@@ -38021,40 +38021,37 @@ async function run() {
         const repository = core.getInput("repository");
         const file = core.getInput("file");
         const value = core.getInput("value");
-        const auth = "Basic " +
-            buffer_1.Buffer.from(`${username}:${password}`, "binary").toString("base64");
-        const response = await fetch(`https://api.bitbucket.org/2.0/repositories/${workspace}/${repository}/src/HEAD/${file}`, {
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-                Authorization: auth,
-            },
+        const url = `https://api.github.com/repos/${workspace}/${repository}/contents/${file}`;
+        const headers = {
+            Accept: "application/vnd.github+json",
+            Authorization: `Bearer ${password}`,
+            "X-GitHub-Api-Version": "2022-11-28",
+        };
+        const response = await fetch(url, { headers });
+        if (!response.ok) {
+            core.setFailed(`Failed to fetch from GitHub ${url}: ${response.status} ${response.statusText}`);
+            return;
+        }
+        core.info(`Successfully fetched values from ${file}`);
+        const meta = (await response.json());
+        const text = buffer_1.Buffer.from(meta.content, "base64").toString("utf-8");
+        const yamlDoc = yaml.load(text);
+        jsonpath_1.default.value(yamlDoc, jsonpath, value);
+        const response2 = await fetch(url, {
+            method: "PUT",
+            headers: { ...headers, "Content-Type": "application/json" },
+            body: JSON.stringify({
+                message: `${file} to ${value} [skip ci]`,
+                content: buffer_1.Buffer.from(yaml.dump(yamlDoc), "utf-8").toString("base64"),
+                sha: meta.sha,
+                committer: { name: username, email: "admin@carepay.com" },
+            }),
         });
-        if (response.ok) {
-            core.info(`Successfully fetched values from ${file}`);
-            const text = await response.text();
-            const yamlDoc = yaml.load(text);
-            jsonpath_1.default.value(yamlDoc, jsonpath, value);
-            const formData = new FormData();
-            formData.append("author", "carepaybot <admin@carepay.com>");
-            formData.append("message", `${file} to ${value} [skip ci]`);
-            formData.append(file, yaml.dump(yamlDoc));
-            const response2 = await fetch(`https://api.bitbucket.org/2.0/repositories/${workspace}/${repository}/src`, {
-                method: "POST",
-                headers: {
-                    Authorization: "Basic " +
-                        buffer_1.Buffer.from(username + ":" + password).toString("base64"),
-                },
-                body: formData,
-            });
-            if (response2.ok) {
-                core.info(`Successfully updated values from ${file}`);
-            }
-            else {
-                core.setFailed(`Failed to update Bitbucket: ${response2.status} ${response2.statusText}`);
-            }
+        if (response2.ok) {
+            core.info(`Successfully updated values from ${file}`);
         }
         else {
-            core.setFailed(`Failed to fetch from Bitbucket https://api.bitbucket.org/2.0/repositories/${workspace}/${repository}/src/HEAD/${file}: ${response.status} ${response.statusText}`);
+            core.setFailed(`Failed to update GitHub: ${response2.status} ${response2.statusText}`);
         }
     }
     catch (error) {
