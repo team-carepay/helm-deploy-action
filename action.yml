@@ -8,10 +8,14 @@ inputs:
     description: For example `v1.2.3`
     required: true
   username:
-    description: Username for login to Git URL
+    description: Git committer name
     required: true
-    default: carepaybot
-  password:
+    default: github-actions
+  email:
+    description: Git committer email
+    required: true
+    default: github-actions@users.noreply.github.com
+  token:
     description: GitHub Personal Access Token (with repo contents write access)
     required: true
   jsonpath:

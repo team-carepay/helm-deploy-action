@@ -38015,7 +38015,8 @@ async function run() {
     try {
         core.info(`Starting helm deploy action`);
         const username = core.getInput("username");
-        const password = core.getInput("password");
+        const email = core.getInput("email");
+        const token = core.getInput("token");
         const jsonpath = core.getInput("jsonpath");
         const workspace = core.getInput("workspace");
         const repository = core.getInput("repository");
@@ -38024,7 +38025,7 @@ async function run() {
         const url = `https://api.github.com/repos/${workspace}/${repository}/contents/${file}`;
         const headers = {
             Accept: "application/vnd.github+json",
-            Authorization: `Bearer ${password}`,
+            Authorization: `Bearer ${token}`,
             "X-GitHub-Api-Version": "2022-11-28",
         };
         const response = await fetch(url, { headers });
@@ -38044,7 +38045,7 @@ async function run() {
                 message: `${file} to ${value} [skip ci]`,
                 content: buffer_1.Buffer.from(yaml.dump(yamlDoc), "utf-8").toString("base64"),
                 sha: meta.sha,
-                committer: { name: username, email: "admin@carepay.com" },
+                committer: { name: username, email },
             }),
         });
         if (response2.ok) {
