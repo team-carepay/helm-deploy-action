@@ -22,13 +22,11 @@ inputs:
     required: true
     default: $.microservice.image
   workspace:
-    description: GitHub owner/organisation
-    required: true
-    default: carepaydev
+    description: GitHub owner/organisation (defaults to the current repository's owner)
+    required: false
   repository:
-    description: GitHub repository name
-    required: true
-    default: central-configs
+    description: GitHub repository name (defaults to the current repository)
+    required: false
 runs:
   using: "node24"
   main: "dist/index.js"

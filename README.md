@@ -13,8 +13,8 @@ entry to a new value, and commits the file back to the default branch with a
 | `file`       | yes      | —                      | Path to the YAML file in the repo, e.g. `apps/ussd/values.yaml` |
 | `value`      | yes      | —                      | New value to set, e.g. `v1.2.3`                                 |
 | `jsonpath`   | yes      | `$.microservice.image` | JSONPath of the entry to update                                 |
-| `workspace`  | yes      | `carepaydev`           | GitHub owner/organisation                                       |
-| `repository` | yes      | `central-configs`      | GitHub repository name                                          |
+| `workspace`  | no       | current repo owner     | GitHub owner/organisation                                       |
+| `repository` | no       | current repo           | GitHub repository name                                          |
 | `username`   | yes      | `github-actions`       | Committer name for the commit                                   |
 | `email`      | yes      | `github-actions@users.noreply.github.com` | Committer email for the commit               |
 | `token`      | yes      | —                      | GitHub Personal Access Token (use a secret, never hard-code)    |
@@ -42,5 +42,7 @@ jobs:
 ```
 
 The step above sets `microservice.image` in `apps/ussd/values.yaml` to the
-pushed tag and commits it to `carepaydev/central-configs`, relying on the
-default `workspace`, `repository`, `username`, and `email`.
+pushed tag and commits it back to the current repository, relying on the
+default `workspace`, `repository`, `username`, and `email`. Set `workspace`
+and `repository` explicitly to target a different repo (e.g.
+`carepaydev/central-configs`).

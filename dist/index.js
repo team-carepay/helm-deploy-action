@@ -38018,8 +38018,10 @@ async function run() {
         const email = core.getInput("email");
         const token = core.getInput("token");
         const jsonpath = core.getInput("jsonpath");
-        const workspace = core.getInput("workspace");
-        const repository = core.getInput("repository");
+        const workspace = core.getInput("workspace") || (process.env.GITHUB_REPOSITORY_OWNER ?? "");
+        const repository = core.getInput("repository") ||
+            (process.env.GITHUB_REPOSITORY ?? "").split("/")[1] ||
+            "";
         const file = core.getInput("file");
         const value = core.getInput("value");
         const url = `https://api.github.com/repos/${workspace}/${repository}/contents/${file}`;
