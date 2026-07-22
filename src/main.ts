@@ -7,7 +7,8 @@ export async function run(): Promise<void> {
   try {
     core.info(`Starting helm deploy action`);
     const username: string = core.getInput("username");
-    const password: string = core.getInput("password");
+    const email: string = core.getInput("email");
+    const token: string = core.getInput("token");
     const jsonpath: string = core.getInput("jsonpath");
     const workspace: string = core.getInput("workspace");
     const repository: string = core.getInput("repository");
@@ -17,7 +18,7 @@ export async function run(): Promise<void> {
     const url = `https://api.github.com/repos/${workspace}/${repository}/contents/${file}`;
     const headers = {
       Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${password}`,
+      Authorization: `Bearer ${token}`,
       "X-GitHub-Api-Version": "2022-11-28",
     };
 
@@ -43,7 +44,7 @@ export async function run(): Promise<void> {
         message: `${file} to ${value} [skip ci]`,
         content: Buffer.from(yaml.dump(yamlDoc), "utf-8").toString("base64"),
         sha: meta.sha,
-        committer: { name: username, email: "admin@carepay.com" },
+        committer: { name: username, email },
       }),
     });
 
