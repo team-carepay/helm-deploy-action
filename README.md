@@ -12,7 +12,7 @@ entry to a new value, and commits the file back to the default branch with a
 | ------------ | -------- | ---------------------- | --------------------------------------------------------------- |
 | `file`       | yes      | —                      | Path to the YAML file in the repo, e.g. `apps/ussd/values.yaml` |
 | `value`      | yes      | —                      | New value to set, e.g. `v1.2.3`                                 |
-| `jsonpath`   | yes      | `$.microservice.image` | JSONPath of the entry to update                                 |
+| `jsonpath`   | yes      | `$.image.tag`          | JSONPath of the entry to update                                 |
 | `workspace`  | no       | current repo owner     | GitHub owner/organisation                                       |
 | `repository` | no       | current repo           | GitHub repository name                                          |
 | `username`   | yes      | `github-actions`       | Committer name for the commit                                   |
@@ -33,15 +33,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Update image tag in central-configs
-        uses: carepay/helm-deploy-action@main
+        uses: team-carepay/helm-deploy-action@v2
         with:
           file: apps/ussd/values.yaml
           value: ${{ github.ref_name }}
-          jsonpath: $.microservice.image
+          jsonpath: $.image.tag
           token: ${{ secrets.GITHUB_PAT }}
 ```
 
-The step above sets `microservice.image` in `apps/ussd/values.yaml` to the
+The step above sets `image.tag` in `apps/ussd/values.yaml` to the
 pushed tag and commits it back to the current repository, relying on the
 default `workspace`, `repository`, `username`, and `email`. Set `workspace`
 and `repository` explicitly to target a different repo (e.g.

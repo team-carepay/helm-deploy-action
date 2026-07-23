@@ -20,7 +20,7 @@ inputs:
     required: true
   jsonpath:
     required: true
-    default: $.microservice.image
+    default: $.image.tag
   workspace:
     description: GitHub owner/organisation (defaults to the current repository's owner)
     required: false
